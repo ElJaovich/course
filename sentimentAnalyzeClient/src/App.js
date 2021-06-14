@@ -45,18 +45,16 @@ class App extends React.Component {
     }
     ret = axios.get(url);
     ret.then((response)=>{
+      //Include code here to check the sentiment and fomrat the data accordingly
 
-      //Include code here to check the sentiment and format the data accordingly
-      const analysisresult = response.data.senti
-      this.setState({sentimentOutput:analysisresult});
-      console.log(analysisresult === "positive")
-      let output = "The sentiment of the given Input is " + analysisresult
-      if(analysisresult === "positive") {
-        output = <div style={{color:"green",fontSize:20}}>The sentiment of the given Input is {analysisresult}</div>
-      } else if (analysisresult === "negative"){
-        output = <div style={{color:"red",fontSize:20}}>The sentiment of the given Input is {analysisresult}</div>
+      this.setState({sentimentOutput:response.data.score});
+      let output = response.data.score;
+      if(response.data.label === "positive") {
+        output = <div style={{color:"green",fontSize:20}}>{'sentiment: '+response.data.label}</div>
+      } else if (response.data.label === "negative"){
+        output = <div style={{color:"red",fontSize:20}}>{'sentiment: '+response.data.label}</div>
       } else {
-        output = <div style={{color:"yellow",fontSize:20}}>The sentiment of the given Input is {analysisresult}</div>
+        output = <div style={{color:"yellow",fontSize:20}}>{'sentiment: '+response.data.label}</div>
       }
       this.setState({sentimentOutput:output});
     });
@@ -74,8 +72,7 @@ class App extends React.Component {
     ret = axios.get(url);
 
     ret.then((response)=>{
-        console.log(response.data.emotions)
-      this.setState({sentimentOutput:<EmotionTable emotions={response.data.emotions}/>});
+      this.setState({sentimentOutput:<EmotionTable emotions={response.data}/>});
   });
   }
   
